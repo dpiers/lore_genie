@@ -6,15 +6,15 @@
   <title>Lorcana Odds Visualizer</title>
   <style>
     :root {
-      --bg: #f7f0e8;
-      --bg-2: #dcebf8;
-      --panel: #0f2538;
-      --panel-soft: rgba(15, 37, 56, 0.82);
-      --accent: #f7b500;
-      --accent-2: #2bb3c0;
-      --text: #e8f1f6;
-      --muted: #c7d5de;
-      --shadow: 0 15px 40px rgba(12, 32, 49, 0.25);
+      --bg: #0a0f1e;
+      --bg-2: #0f182d;
+      --panel: rgba(18, 26, 45, 0.9);
+      --panel-strong: #0f1528;
+      --accent: #f2c14b;
+      --accent-2: #c9912f;
+      --text: #f8f2e7;
+      --muted: #c6c0b4;
+      --shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
       --radius: 18px;
     }
 
@@ -23,8 +23,9 @@
       margin: 0;
       min-height: 100vh;
       font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
-      background: radial-gradient(circle at 20% 20%, var(--bg), #ffffff),
-                  linear-gradient(120deg, var(--bg-2) 0%, #fefaf5 50%, #d9eff5 100%);
+      background: radial-gradient(circle at 18% 22%, rgba(242, 193, 75, 0.08), transparent 42%),
+                  radial-gradient(circle at 82% 10%, rgba(92, 124, 214, 0.14), transparent 45%),
+                  linear-gradient(135deg, var(--bg) 0%, var(--bg-2) 60%, #0b1020 100%);
       color: var(--text);
     }
 
@@ -35,27 +36,21 @@
     }
 
     .hero {
-      background: linear-gradient(135deg, var(--panel) 0%, #18354b 50%, #1f425d 100%);
+      background: linear-gradient(135deg, rgba(15, 21, 40, 0.9) 0%, rgba(24, 31, 58, 0.95) 50%, rgba(12, 18, 32, 0.95) 100%);
       border-radius: var(--radius);
-      padding: 26px 28px;
+      padding: 20px 22px;
       box-shadow: var(--shadow);
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 18px;
+      display: flex;
       align-items: center;
+      justify-content: space-between;
     }
 
     .hero h1 {
       margin: 0;
-      font-size: 28px;
-      letter-spacing: 0.3px;
-    }
-
-    .hero p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      max-width: 720px;
-      line-height: 1.4;
+      font-size: 26px;
+      letter-spacing: 0.5px;
+      color: var(--accent);
+      text-shadow: 0 3px 10px rgba(0,0,0,0.4);
     }
 
     .badge {
@@ -71,18 +66,17 @@
     .panel {
       margin-top: 18px;
       padding: 20px 20px 16px;
-      background: var(--panel-soft);
+      background: var(--panel);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(242, 193, 75, 0.12);
     }
 
     .panel h2 {
       margin: 0 0 12px;
-      font-size: 18px;
+      font-size: 17px;
       color: var(--muted);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+      letter-spacing: 0.4px;
     }
 
     .grid {
@@ -138,26 +132,26 @@
       padding: 12px 16px;
       font-size: 15px;
       cursor: pointer;
-      color: #0f2538;
+      color: #0b1020;
       background: var(--accent);
       font-weight: 700;
-      box-shadow: 0 12px 22px rgba(247, 181, 0, 0.25);
+      letter-spacing: 0.2px;
+      box-shadow: 0 12px 22px rgba(242, 193, 75, 0.25);
       transition: transform 0.12s ease, box-shadow 0.2s ease, filter 0.2s ease;
     }
 
     button.secondary {
-      background: var(--accent-2);
-      color: #0b1f2d;
-      box-shadow: 0 12px 22px rgba(43, 179, 192, 0.25);
+      background: #1f2a46;
+      color: var(--text);
+      border: 1px solid rgba(242, 193, 75, 0.2);
+      box-shadow: none;
     }
 
     button:hover { transform: translateY(-1px); filter: brightness(1.03); }
     button:active { transform: translateY(0); }
 
     .status {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 14px;
+      display: none;
     }
 
     .pill {
@@ -183,10 +177,10 @@
     }
 
     .stat-card {
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.03);
       border-radius: 14px;
       padding: 12px 14px;
-      border: 1px solid rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(242, 193, 75, 0.1);
     }
 
     .stat-card h3 {
@@ -203,6 +197,42 @@
       color: var(--text);
     }
 
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 26px;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 6px;
+    }
+
+    .table th, .table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(242, 193, 75, 0.1);
+    }
+
+    .table th {
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .table td {
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .table tr:last-child td {
+      border-bottom: none;
+    }
+
     .chart {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
@@ -211,8 +241,43 @@
       padding: 8px 4px 0;
     }
 
+    .chart-block {
+      margin-top: 22px;
+      margin-bottom: 10px;
+    }
+
+    .chart-title {
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .chart-wrapper {
+      margin-top: 4px;
+    }
+
+    .chart-axis {
+      margin-top: 22px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0.3px;
+    }
+
+    .table-title {
+      font-weight: 700;
+      font-size: 15px;
+      margin: 10px 0 6px;
+      color: var(--text);
+    }
+
+    .result-meta {
+      font-weight: 700;
+    }
+
     .bar {
-      background: linear-gradient(180deg, var(--accent) 0%, #fbd76d 100%);
+      background: linear-gradient(180deg, var(--accent) 0%, #ffd773 100%);
       border-radius: 10px 10px 6px 6px;
       position: relative;
       min-height: 28px;
@@ -263,54 +328,40 @@
 <body>
   <main class="shell">
     <section class="hero">
-      <div>
-        <h1>Lorcana Odds Visualizer</h1>
-        <p>Hit the FastAPI endpoints to explore booster outcomes for each rarity. Monte Carlo runs give a quick histogram; the inspect endpoint shows analytic probabilities.</p>
-      </div>
-      <div class="badge">Real-time odds</div>
+      <h1>Lorcana Odds Visualizer</h1>
     </section>
 
     <section class="panel">
-      <h2>API & Inputs</h2>
+      <h2>Inputs</h2>
       <div class="grid two">
-        <div>
-          <label for="apiBase">API base URL</label>
-          <input id="apiBase" type="text" value="http://localhost:8000" />
-        </div>
         <div>
           <label for="setSelect">Set</label>
           <select id="setSelect"></select>
         </div>
-      </div>
-
-      <div class="grid three" style="margin-top: 12px;">
         <div>
           <label for="raritySelect">Rarity</label>
           <select id="raritySelect"></select>
-        </div>
-        <div>
-          <label for="packsInput">Packs</label>
-          <input id="packsInput" type="number" min="1" value="12" />
-        </div>
-        <div>
-          <label for="trialsInput">Trials (MC)</label>
-          <input id="trialsInput" type="number" min="100" value="10000" step="100" />
         </div>
       </div>
 
       <div class="grid two" style="margin-top: 12px;">
         <div>
-          <label for="maxkInput">Max copies bucket (k)</label>
-          <input id="maxkInput" type="number" min="3" value="10" />
+          <label for="packsPreset">Packs</label>
+          <select id="packsPreset">
+            <option value="1">Blister (1)</option>
+            <option value="8">Trove (8)</option>
+            <option value="24" selected>Box (24)</option>
+            <option value="96">Case (96)</option>
+            <option value="custom">Custom</option>
+          </select>
         </div>
-        <div>
-          <label for="kvaluesInput">Inspect thresholds (comma separated)</label>
-          <input id="kvaluesInput" type="text" placeholder="e.g. 1,4,6" />
+        <div id="customPacksWrapper" style="display:none;">
+          <label for="packsInput">Custom packs</label>
+          <input id="packsInput" type="number" min="1" value="12" />
         </div>
       </div>
 
       <div class="controls">
-        <button id="refreshSets" class="secondary">Refresh sets</button>
         <button id="inspectBtn">Inspect odds</button>
         <button id="runBtn">Run Monte Carlo</button>
         <div class="status" id="statusText"></div>
@@ -328,18 +379,29 @@
   <script>
     const setSelect = document.getElementById("setSelect");
     const raritySelect = document.getElementById("raritySelect");
+    const packsPreset = document.getElementById("packsPreset");
     const packsInput = document.getElementById("packsInput");
-    const trialsInput = document.getElementById("trialsInput");
-    const maxkInput = document.getElementById("maxkInput");
-    const kvaluesInput = document.getElementById("kvaluesInput");
-    const apiBaseInput = document.getElementById("apiBase");
+    const customPacksWrapper = document.getElementById("customPacksWrapper");
     const statusText = document.getElementById("statusText");
     const resultsArea = document.getElementById("resultsArea");
 
-    const defaultResultsMsg = () => '<div class="small">No runs yet. Choose a set and rarity, then click an action.</div>';
-
     function clearResults() {
       resultsArea.innerHTML = '<div class="small">Values changed. Run Inspect or Monte Carlo again.</div>';
+    }
+
+    const TOTAL_TRIALS = 10000;
+    const UPDATES = 50;
+    const CHUNK_TRIALS = TOTAL_TRIALS / UPDATES;
+    const MAX_K = 10;
+    const INSPECT_K = [1, 2, 3, 4];
+    let initialized = false;
+
+    function currentPacks() {
+      const preset = packsPreset.value;
+      if (preset === "custom") {
+        return parseInt(packsInput.value, 10);
+      }
+      return parseInt(preset, 10);
     }
 
     function setStatus(text, tone = "muted") {
@@ -347,24 +409,26 @@
       statusText.style.color = tone === "error" ? "#ff9b9b" : "var(--muted)";
     }
 
-    function baseUrl() {
-      return apiBaseInput.value.replace(/\/$/, "");
-    }
-
     async function apiGet(path) {
-      const res = await fetch(baseUrl() + path);
+      const res = await fetch(path);
       if (!res.ok) throw new Error(await res.text() || res.statusText);
       return res.json();
     }
 
     async function apiPost(path, body) {
-      const res = await fetch(baseUrl() + path, {
+      const res = await fetch(path, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
       if (!res.ok) throw new Error(await res.text() || res.statusText);
       return res.json();
+    }
+
+    function formatRarityName(r) {
+      return r
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (m) => m.toUpperCase());
     }
 
     async function loadSets() {
@@ -380,17 +444,23 @@
           setSelect.appendChild(opt);
         });
         if (data.length) {
-          setSelect.value = data[0].id;
-          populateRaritiesFromSelection();
+          const latest = data[data.length - 1];
+          setSelect.value = latest.id;
+          packsPreset.value = "24"; // default to Box
+          customPacksWrapper.style.display = "none";
+          populateRaritiesFromSelection("legendary");
+          await onInspect();
         }
         setStatus(`Loaded ${data.length} sets`);
       } catch (err) {
         console.error(err);
-        setStatus("Failed to load sets (check API base URL).", "error");
+        setStatus("Failed to load sets.", "error");
+      } finally {
+        initialized = true;
       }
     }
 
-    function populateRaritiesFromSelection() {
+    function populateRaritiesFromSelection(preferredRarity) {
       const selected = setSelect.selectedOptions[0];
       if (!selected) return;
       const rarities = JSON.parse(selected.dataset.rarities || "[]");
@@ -398,35 +468,56 @@
       rarities.forEach((rarity) => {
         const opt = document.createElement("option");
         opt.value = rarity;
-        opt.textContent = rarity.replace("_", " ");
+        opt.textContent = formatRarityName(rarity);
         raritySelect.appendChild(opt);
       });
-    }
-
-    function parseCsvInts(text) {
-      if (!text) return [];
-      return text
-        .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean)
-        .map((s) => parseInt(s, 10))
-        .filter((n) => !Number.isNaN(n));
+      const preferred = preferredRarity || raritySelect.value;
+      if (preferred && rarities.includes(preferred)) {
+        raritySelect.value = preferred;
+      } else if (rarities.length) {
+        raritySelect.value = rarities[0];
+      }
     }
 
     function renderInspectResult(res) {
-      const pkLines = Object.entries(res.pk)
-        .map(([k, p]) => `<span class="pill">P(≥${k}) ${formatPct(p)}</span>`)
+      const rarityName = formatRarityName(res.rarity);
+      const rowsCard = Object.entries(res.pk_card || {})
+        .map(([k, p]) => `<tr><td>≥${k}</td><td>${formatPct(p)}</td></tr>`)
+        .join("");
+      const rowsAny = Object.entries(res.pk_any || {})
+        .map(([k, p]) => `<tr><td>≥${k}</td><td>${formatPct(p)}</td></tr>`)
         .join("");
 
       resultsArea.innerHTML = `
         <div class="stat-card">
           <h3>Inspect odds</h3>
           <div class="stack">
-            <div class="small">${res.set_name} · ${res.rarity.replace("_", " ")} · ${res.packs} packs</div>
+            <div class="small result-meta">${res.set_name} · ${rarityName} · ${res.packs} packs</div>
             <div class="flex">
-              <span class="pill">λ ${res.lambda.toFixed(3)}</span>
-              <span class="pill">P(0 copies) ${formatPct(res.p0)}</span>
-              ${pkLines}
+              <span class="pill">Specific ${rarityName}: λ ${res.lambda_card.toFixed(3)}</span>
+              <span class="pill">Specific ${rarityName}: P(0) ${formatPct(res.p0_card)}</span>
+              <span class="pill">Any ${rarityName}: λ ${res.lambda_any.toFixed(3)}</span>
+              <span class="pill">Any ${rarityName}: P(0) ${formatPct(res.p0_any)}</span>
+            </div>
+            <div class="grid two">
+              <div>
+                <div class="table-title">Specific ${rarityName}</div>
+                <table class="table">
+                  <thead>
+                    <tr><th>Number of Copies</th><th>Probability</th></tr>
+                  </thead>
+                  <tbody>${rowsCard}</tbody>
+                </table>
+              </div>
+              <div>
+                <div class="table-title">Any ${rarityName}</div>
+                <table class="table">
+                  <thead>
+                    <tr><th>Number of Copies</th><th>Probability</th></tr>
+                  </thead>
+                  <tbody>${rowsAny}</tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -438,43 +529,66 @@
     }
 
     function renderMCResult(res) {
-      const maxCount = Math.max(...res.counts, 1);
-      const bars = res.counts
-        .map((count, idx) => {
-          const height = Math.max(8, Math.round((count / maxCount) * 120));
-          const pct = (count / res.num_trials) * 100;
-          return `
-            <div class="bar" style="height:${height}px">
-              <div class="value">${pct.toFixed(1)}%</div>
-              <span>k=${idx}</span>
-            </div>
-          `;
-        })
-        .join("");
+      const renderBars = (counts, numTrials) => {
+        const maxCount = Math.max(...counts, 1);
+        const bars = counts
+          .map((count, idx) => {
+            const height = Math.max(12, Math.round((count / maxCount) * 120));
+            const pct = (count / numTrials) * 100;
+            return `
+              <div class="bar" style="height:${height}px">
+                <div class="value">${pct.toFixed(1)}%</div>
+                <span>${idx}</span>
+              </div>
+            `;
+          })
+          .join("");
+        return `
+          <div class="chart-wrapper">
+            <div class="chart">${bars}</div>
+            <div class="chart-axis">Copies</div>
+          </div>
+        `;
+      };
 
-      const overflowPct = (res.overflow / res.num_trials) * 100;
+      const overflowPctCard = (res.overflow / res.num_trials) * 100;
+      const overflowPctAny = (res.overflow_any / res.num_trials) * 100;
+      const rarityName = formatRarityName(res.rarity);
+
       resultsArea.innerHTML = `
         <div class="stat-card">
           <h3>Monte Carlo histogram</h3>
           <div class="stack">
-            <div class="small">${res.set_name} · ${res.rarity.replace("_", " ")} · ${res.packs} packs · ${res.num_trials} trials</div>
-            <div class="flex">
-              <span class="pill">λ ${res.lambda_.toFixed(3)}</span>
-              <span class="pill">Overflow > k=${res.max_k}: ${overflowPct.toFixed(2)}%</span>
+            <div class="small">${res.set_name} · ${rarityName} · ${res.packs} packs · ${res.num_trials} trials</div>
+
+            <div class="chart-block">
+            <div class="chart-title">Specific ${rarityName}</div>
+            <div class="pill-row">
+              <span class="pill">Specific λ ${res.lambda_card.toFixed(3)}</span>
+              <span class="pill">Specific ${rarityName} · Copies > ${res.max_k}: ${overflowPctCard.toFixed(2)}%</span>
             </div>
-            <div class="chart">${bars}</div>
+            ${renderBars(res.counts, res.num_trials)}
+          </div>
+
+          <div class="chart-block">
+            <div class="chart-title">Any ${rarityName}</div>
+            <div class="pill-row">
+              <span class="pill">Any λ ${res.lambda_any.toFixed(3)}</span>
+              <span class="pill">Any ${rarityName} · Copies > ${res.max_k}: ${overflowPctAny.toFixed(2)}%</span>
+            </div>
+            ${renderBars(res.counts_any, res.num_trials)}
           </div>
         </div>
+      </div>
       `;
     }
 
     async function onInspect() {
-      const kValues = parseCsvInts(kvaluesInput.value);
       const payload = {
         set_number: parseInt(setSelect.value, 10),
         rarity: raritySelect.value,
-        packs: parseInt(packsInput.value, 10),
-        k_values: kValues.length ? kValues : undefined,
+        packs: currentPacks(),
+        k_values: INSPECT_K,
       };
       setStatus("Calling /inspect-rarity…");
       try {
@@ -488,36 +602,77 @@
     }
 
     async function onRunMC() {
-      const payload = {
-        set_number: parseInt(setSelect.value, 10),
-        rarity: raritySelect.value,
-        packs: parseInt(packsInput.value, 10),
-        trials: parseInt(trialsInput.value, 10),
-        max_k: parseInt(maxkInput.value, 10),
-      };
-      setStatus("Running Monte Carlo…");
+      const runBtn = document.getElementById("runBtn");
+      runBtn.disabled = true;
+      let countsCard = Array.from({ length: MAX_K + 1 }, () => 0);
+      let countsAny = Array.from({ length: MAX_K + 1 }, () => 0);
+      let overflowCard = 0;
+      let overflowAny = 0;
+      let lambdaCard = null;
+      let lambdaAny = null;
+      const totalTrials = TOTAL_TRIALS;
+      setStatus(`Running Monte Carlo… 0/${totalTrials}`);
       try {
-        const res = await apiPost("/mc-batch", payload);
-        renderMCResult(res);
+        for (let i = 0; i < UPDATES; i++) {
+          const payload = {
+            set_number: parseInt(setSelect.value, 10),
+            rarity: raritySelect.value,
+            packs: currentPacks(),
+            trials: CHUNK_TRIALS,
+            max_k: MAX_K,
+          };
+          const res = await apiPost("/mc-batch", payload);
+          lambdaCard = res.lambda_;
+          lambdaAny = res.lambda_any;
+          countsCard = countsCard.map((c, idx) => c + (res.counts[idx] || 0));
+          countsAny = countsAny.map((c, idx) => c + (res.counts_any[idx] || 0));
+          overflowCard += res.overflow || 0;
+          overflowAny += res.overflow_any || 0;
+          renderMCResult({
+            set_number: res.set_number,
+            set_name: res.set_name,
+            rarity: res.rarity,
+            packs: res.packs,
+            lambda_card: lambdaCard,
+            lambda_any: lambdaAny,
+            num_trials: CHUNK_TRIALS * (i + 1),
+            max_k: MAX_K,
+            counts: countsCard,
+            overflow: overflowCard,
+            counts_any: countsAny,
+            overflow_any: overflowAny,
+          });
+          setStatus(`Running Monte Carlo… ${(CHUNK_TRIALS * (i + 1))}/${totalTrials}`);
+          await new Promise((resolve) => setTimeout(resolve, 2500 / UPDATES));
+        }
         setStatus("Monte Carlo complete");
       } catch (err) {
         console.error(err);
         setStatus("Monte Carlo failed (see console).", "error");
+      } finally {
+        runBtn.disabled = false;
       }
     }
 
-    document.getElementById("refreshSets").addEventListener("click", loadSets);
     document.getElementById("inspectBtn").addEventListener("click", onInspect);
     document.getElementById("runBtn").addEventListener("click", onRunMC);
+    const autoInspect = () => {
+      if (!initialized) return;
+      onInspect();
+    };
+
     setSelect.addEventListener("change", () => {
-      populateRaritiesFromSelection();
-      clearResults();
+      const currentRarity = raritySelect.value;
+      populateRaritiesFromSelection(currentRarity);
+      autoInspect();
     });
-    // Clear results when any input changes so users re-run after edits.
-    [raritySelect, packsInput, trialsInput, maxkInput, kvaluesInput, apiBaseInput].forEach((el) => {
-      el.addEventListener("input", clearResults);
-      el.addEventListener("change", clearResults);
+    raritySelect.addEventListener("change", autoInspect);
+    packsPreset.addEventListener("change", () => {
+      customPacksWrapper.style.display = packsPreset.value === "custom" ? "block" : "none";
+      autoInspect();
     });
+    packsInput.addEventListener("input", autoInspect);
+    packsInput.addEventListener("change", autoInspect);
 
     loadSets();
   </script>

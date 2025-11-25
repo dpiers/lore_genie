@@ -317,6 +317,13 @@ def lambda_for_card(cfg: SetConfig, rarity: str, num_packs: int) -> float:
     return num_packs * (E_R / N_R)
 
 
+def lambda_for_rarity_total(cfg: SetConfig, rarity: str, num_packs: int) -> float:
+    if rarity not in cfg.expected_per_pack:
+        raise ValueError(f"No expected_per_pack entry for rarity {rarity!r}.")
+    E_R = cfg.expected_per_pack[rarity]
+    return num_packs * E_R
+
+
 def card_distribution_poisson(
     cfg: SetConfig,
     rarity: str,
@@ -342,14 +349,12 @@ def prob_at_least_k_copies(
 #  Monte Carlo simulations
 # ================================================================
 
-def monte_carlo_histogram_for_card(
-    cfg: SetConfig,
-    rarity: str,
-    num_packs: int,
+
+def monte_carlo_histogram(
+    lam: float,
     num_trials: int,
     max_k: int = 10,
 ) -> dict:
-    lam = lambda_for_card(cfg, rarity, num_packs)
     samples = np.random.poisson(lam, size=num_trials)
     counts = [int((samples == k).sum()) for k in range(max_k + 1)]
     overflow = int((samples > max_k).sum())
@@ -362,17 +367,34 @@ def monte_carlo_histogram_for_card(
     }
 
 
+def monte_carlo_histogram_for_card(
+    cfg: SetConfig,
+    rarity: str,
+    num_packs: int,
+    num_trials: int,
+    max_k: int = 10,
+) -> dict:
+    lam = lambda_for_card(cfg, rarity, num_packs)
+    return monte_carlo_histogram(lam, num_trials, max_k=max_k)
+
+
 def inspect_rarity(set_number: int, rarity: str, num_packs: int, k_values=(1, 4)) -> dict:
     cfg = SET_CONFIGS[set_number]
-    lam = lambda_for_card(cfg, rarity, num_packs)
-    p0 = math.exp(-lam)
-    pk = {k: prob_at_least(k, lam) for k in k_values}
+    lam_card = lambda_for_card(cfg, rarity, num_packs)
+    lam_any = lambda_for_rarity_total(cfg, rarity, num_packs)
+    p0_card = math.exp(-lam_card)
+    p0_any = math.exp(-lam_any)
+    pk_card = {k: prob_at_least(k, lam_card) for k in k_values}
+    pk_any = {k: prob_at_least(k, lam_any) for k in k_values}
     return {
         "set_number": set_number,
         "set_name": cfg.name,
         "rarity": rarity,
         "packs": num_packs,
-        "lambda": lam,
-        "p0": p0,
-        "pk": pk,
+        "lambda_card": lam_card,
+        "lambda_any": lam_any,
+        "p0_card": p0_card,
+        "p0_any": p0_any,
+        "pk_card": pk_card,
+        "pk_any": pk_any,
     }

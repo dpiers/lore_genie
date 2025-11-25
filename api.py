@@ -8,7 +8,14 @@ from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from engine import SET_CONFIGS, monte_carlo_histogram_for_card, inspect_rarity
+from engine import (
+    SET_CONFIGS,
+    monte_carlo_histogram,
+    monte_carlo_histogram_for_card,
+    inspect_rarity,
+    lambda_for_rarity_total,
+    lambda_for_card,
+)
 
 app = FastAPI(title="Lorcana Odds API", version="0.1.0")
 
@@ -61,32 +68,45 @@ class MCBatchResponse(BaseModel):
     rarity: str
     packs: int
     lambda_: float
+    lambda_any: float
     num_trials: int
     max_k: int
     counts: List[int]
     overflow: int
+    counts_any: List[int]
+    overflow_any: int
 
 
 @app.post("/mc-batch", response_model=MCBatchResponse)
 def mc_batch(req: MCBatchRequest) -> MCBatchResponse:
     cfg = SET_CONFIGS[req.set_number]
-    hist = monte_carlo_histogram_for_card(
+    hist_card = monte_carlo_histogram_for_card(
         cfg,
         req.rarity,
         req.packs,
         req.trials,
         max_k=req.max_k or 10,
     )
+    lam_any = lambda_for_rarity_total(cfg, req.rarity, req.packs)
+    hist_any = monte_carlo_histogram(
+        lam_any,
+        req.trials,
+        max_k=req.max_k or 10,
+    )
+    lam_card = lambda_for_card(cfg, req.rarity, req.packs)
     return MCBatchResponse(
         set_number=req.set_number,
         set_name=cfg.name,
         rarity=req.rarity,
         packs=req.packs,
-        lambda_=hist["lambda"],
-        num_trials=hist["num_trials"],
-        max_k=hist["max_k"],
-        counts=hist["counts"],
-        overflow=hist["overflow"],
+        lambda_=hist_card["lambda"],
+        lambda_any=lam_any,
+        num_trials=hist_card["num_trials"],
+        max_k=hist_card["max_k"],
+        counts=hist_card["counts"],
+        overflow=hist_card["overflow"],
+        counts_any=hist_any["counts"],
+        overflow_any=hist_any["overflow"],
     )
 
 
