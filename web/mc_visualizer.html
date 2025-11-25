@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lorcana Odds Visualizer</title>
+  <style>
+    :root {
+      --bg: #f7f0e8;
+      --bg-2: #dcebf8;
+      --panel: #0f2538;
+      --panel-soft: rgba(15, 37, 56, 0.82);
+      --accent: #f7b500;
+      --accent-2: #2bb3c0;
+      --text: #e8f1f6;
+      --muted: #c7d5de;
+      --shadow: 0 15px 40px rgba(12, 32, 49, 0.25);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+      background: radial-gradient(circle at 20% 20%, var(--bg), #ffffff),
+                  linear-gradient(120deg, var(--bg-2) 0%, #fefaf5 50%, #d9eff5 100%);
+      color: var(--text);
+    }
+
+    .shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--panel) 0%, #18354b 50%, #1f425d 100%);
+      border-radius: var(--radius);
+      padding: 26px 28px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 0.3px;
+    }
+
+    .hero p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      max-width: 720px;
+      line-height: 1.4;
+    }
+
+    .badge {
+      background: var(--accent);
+      color: #0f2538;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      box-shadow: 0 12px 20px rgba(247, 181, 0, 0.25);
+    }
+
+    .panel {
+      margin-top: 18px;
+      padding: 20px 20px 16px;
+      background: var(--panel-soft);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    @media (min-width: 720px) {
+      .grid.two {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .grid.three {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.2px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(247, 181, 0, 0.22);
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+      align-items: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 15px;
+      cursor: pointer;
+      color: #0f2538;
+      background: var(--accent);
+      font-weight: 700;
+      box-shadow: 0 12px 22px rgba(247, 181, 0, 0.25);
+      transition: transform 0.12s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    button.secondary {
+      background: var(--accent-2);
+      color: #0b1f2d;
+      box-shadow: 0 12px 22px rgba(43, 179, 192, 0.25);
+    }
+
+    button:hover { transform: translateY(-1px); filter: brightness(1.03); }
+    button:active { transform: translateY(0); }
+
+    .status {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      margin-right: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .flex {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .results {
+      display: grid;
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 14px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .stat-card h3 {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .stat-card p {
+      margin: 0;
+      font-size: 15px;
+      color: var(--text);
+    }
+
+    .chart {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+      gap: 10px;
+      align-items: end;
+      padding: 8px 4px 0;
+    }
+
+    .bar {
+      background: linear-gradient(180deg, var(--accent) 0%, #fbd76d 100%);
+      border-radius: 10px 10px 6px 6px;
+      position: relative;
+      min-height: 28px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
+    }
+
+    .bar span {
+      position: absolute;
+      bottom: -22px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .bar .value {
+      position: absolute;
+      top: -24px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .inline-code {
+      background: rgba(255, 255, 255, 0.06);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-family: "SFMono-Regular", "Menlo", monospace;
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .stack {
+      display: grid;
+      gap: 6px;
+    }
+
+    .small {
+      font-size: 13px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <h1>Lorcana Odds Visualizer</h1>
+        <p>Hit the FastAPI endpoints to explore booster outcomes for each rarity. Monte Carlo runs give a quick histogram; the inspect endpoint shows analytic probabilities.</p>
+      </div>
+      <div class="badge">Real-time odds</div>
+    </section>
+
+    <section class="panel">
+      <h2>API & Inputs</h2>
+      <div class="grid two">
+        <div>
+          <label for="apiBase">API base URL</label>
+          <input id="apiBase" type="text" value="http://localhost:8000" />
+        </div>
+        <div>
+          <label for="setSelect">Set</label>
+          <select id="setSelect"></select>
+        </div>
+      </div>
+
+      <div class="grid three" style="margin-top: 12px;">
+        <div>
+          <label for="raritySelect">Rarity</label>
+          <select id="raritySelect"></select>
+        </div>
+        <div>
+          <label for="packsInput">Packs</label>
+          <input id="packsInput" type="number" min="1" value="12" />
+        </div>
+        <div>
+          <label for="trialsInput">Trials (MC)</label>
+          <input id="trialsInput" type="number" min="100" value="10000" step="100" />
+        </div>
+      </div>
+
+      <div class="grid two" style="margin-top: 12px;">
+        <div>
+          <label for="maxkInput">Max copies bucket (k)</label>
+          <input id="maxkInput" type="number" min="3" value="10" />
+        </div>
+        <div>
+          <label for="kvaluesInput">Inspect thresholds (comma separated)</label>
+          <input id="kvaluesInput" type="text" placeholder="e.g. 1,4,6" />
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="refreshSets" class="secondary">Refresh sets</button>
+        <button id="inspectBtn">Inspect odds</button>
+        <button id="runBtn">Run Monte Carlo</button>
+        <div class="status" id="statusText"></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Results</h2>
+      <div id="resultsArea" class="results">
+        <div class="small">No runs yet. Choose a set and rarity, then click an action.</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const setSelect = document.getElementById("setSelect");
+    const raritySelect = document.getElementById("raritySelect");
+    const packsInput = document.getElementById("packsInput");
+    const trialsInput = document.getElementById("trialsInput");
+    const maxkInput = document.getElementById("maxkInput");
+    const kvaluesInput = document.getElementById("kvaluesInput");
+    const apiBaseInput = document.getElementById("apiBase");
+    const statusText = document.getElementById("statusText");
+    const resultsArea = document.getElementById("resultsArea");
+
+    const defaultResultsMsg = () => '<div class="small">No runs yet. Choose a set and rarity, then click an action.</div>';
+
+    function clearResults() {
+      resultsArea.innerHTML = '<div class="small">Values changed. Run Inspect or Monte Carlo again.</div>';
+    }
+
+    function setStatus(text, tone = "muted") {
+      statusText.textContent = text;
+      statusText.style.color = tone === "error" ? "#ff9b9b" : "var(--muted)";
+    }
+
+    function baseUrl() {
+      return apiBaseInput.value.replace(/\/$/, "");
+    }
+
+    async function apiGet(path) {
+      const res = await fetch(baseUrl() + path);
+      if (!res.ok) throw new Error(await res.text() || res.statusText);
+      return res.json();
+    }
+
+    async function apiPost(path, body) {
+      const res = await fetch(baseUrl() + path, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) throw new Error(await res.text() || res.statusText);
+      return res.json();
+    }
+
+    async function loadSets() {
+      setStatus("Loading sets…");
+      try {
+        const data = await apiGet("/sets");
+        setSelect.innerHTML = "";
+        data.forEach((set) => {
+          const opt = document.createElement("option");
+          opt.value = set.id;
+          opt.textContent = `${set.id} – ${set.name}`;
+          opt.dataset.rarities = JSON.stringify(set.rarities);
+          setSelect.appendChild(opt);
+        });
+        if (data.length) {
+          setSelect.value = data[0].id;
+          populateRaritiesFromSelection();
+        }
+        setStatus(`Loaded ${data.length} sets`);
+      } catch (err) {
+        console.error(err);
+        setStatus("Failed to load sets (check API base URL).", "error");
+      }
+    }
+
+    function populateRaritiesFromSelection() {
+      const selected = setSelect.selectedOptions[0];
+      if (!selected) return;
+      const rarities = JSON.parse(selected.dataset.rarities || "[]");
+      raritySelect.innerHTML = "";
+      rarities.forEach((rarity) => {
+        const opt = document.createElement("option");
+        opt.value = rarity;
+        opt.textContent = rarity.replace("_", " ");
+        raritySelect.appendChild(opt);
+      });
+    }
+
+    function parseCsvInts(text) {
+      if (!text) return [];
+      return text
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .map((s) => parseInt(s, 10))
+        .filter((n) => !Number.isNaN(n));
+    }
+
+    function renderInspectResult(res) {
+      const pkLines = Object.entries(res.pk)
+        .map(([k, p]) => `<span class="pill">P(≥${k}) ${formatPct(p)}</span>`)
+        .join("");
+
+      resultsArea.innerHTML = `
+        <div class="stat-card">
+          <h3>Inspect odds</h3>
+          <div class="stack">
+            <div class="small">${res.set_name} · ${res.rarity.replace("_", " ")} · ${res.packs} packs</div>
+            <div class="flex">
+              <span class="pill">λ ${res.lambda.toFixed(3)}</span>
+              <span class="pill">P(0 copies) ${formatPct(res.p0)}</span>
+              ${pkLines}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function formatPct(p) {
+      return `${(p * 100).toFixed(2)}%`;
+    }
+
+    function renderMCResult(res) {
+      const maxCount = Math.max(...res.counts, 1);
+      const bars = res.counts
+        .map((count, idx) => {
+          const height = Math.max(8, Math.round((count / maxCount) * 120));
+          const pct = (count / res.num_trials) * 100;
+          return `
+            <div class="bar" style="height:${height}px">
+              <div class="value">${pct.toFixed(1)}%</div>
+              <span>k=${idx}</span>
+            </div>
+          `;
+        })
+        .join("");
+
+      const overflowPct = (res.overflow / res.num_trials) * 100;
+      resultsArea.innerHTML = `
+        <div class="stat-card">
+          <h3>Monte Carlo histogram</h3>
+          <div class="stack">
+            <div class="small">${res.set_name} · ${res.rarity.replace("_", " ")} · ${res.packs} packs · ${res.num_trials} trials</div>
+            <div class="flex">
+              <span class="pill">λ ${res.lambda_.toFixed(3)}</span>
+              <span class="pill">Overflow > k=${res.max_k}: ${overflowPct.toFixed(2)}%</span>
+            </div>
+            <div class="chart">${bars}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function onInspect() {
+      const kValues = parseCsvInts(kvaluesInput.value);
+      const payload = {
+        set_number: parseInt(setSelect.value, 10),
+        rarity: raritySelect.value,
+        packs: parseInt(packsInput.value, 10),
+        k_values: kValues.length ? kValues : undefined,
+      };
+      setStatus("Calling /inspect-rarity…");
+      try {
+        const res = await apiPost("/inspect-rarity", payload);
+        renderInspectResult(res);
+        setStatus("Inspect complete");
+      } catch (err) {
+        console.error(err);
+        setStatus("Inspect failed (see console).", "error");
+      }
+    }
+
+    async function onRunMC() {
+      const payload = {
+        set_number: parseInt(setSelect.value, 10),
+        rarity: raritySelect.value,
+        packs: parseInt(packsInput.value, 10),
+        trials: parseInt(trialsInput.value, 10),
+        max_k: parseInt(maxkInput.value, 10),
+      };
+      setStatus("Running Monte Carlo…");
+      try {
+        const res = await apiPost("/mc-batch", payload);
+        renderMCResult(res);
+        setStatus("Monte Carlo complete");
+      } catch (err) {
+        console.error(err);
+        setStatus("Monte Carlo failed (see console).", "error");
+      }
+    }
+
+    document.getElementById("refreshSets").addEventListener("click", loadSets);
+    document.getElementById("inspectBtn").addEventListener("click", onInspect);
+    document.getElementById("runBtn").addEventListener("click", onRunMC);
+    setSelect.addEventListener("change", () => {
+      populateRaritiesFromSelection();
+      clearResults();
+    });
+    // Clear results when any input changes so users re-run after edits.
+    [raritySelect, packsInput, trialsInput, maxkInput, kvaluesInput, apiBaseInput].forEach((el) => {
+      el.addEventListener("input", clearResults);
+      el.addEventListener("change", clearResults);
+    });
+
+    loadSets();
+  </script>
+</body>
+</html>
